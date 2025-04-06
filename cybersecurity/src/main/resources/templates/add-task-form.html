@@ -1,0 +1,41 @@
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <title>Create Task</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h3>Create a Task</h3>
+      <hr/>
+      <form th:action="@{/saveTask}" method="post">
+        <div class="mb-3">
+          <label for="name" class="form-label">Task Name</label>
+          <input type="text" class="form-control" id="name" name="name" th:value="${task.name}" />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" name="description" th:value="${task.description}">
+        </div>
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" name="status">
+            <option value="PENDING" th:selected="${task.status == 'PENDING'}">Pending</option>
+            <option value="IN_PROGRESS" th:selected="${task.status == 'IN_PROGRESS'}">In Progress</option>
+            <option value="COMPLETED" th:selected="${task.status == 'COMPLETED'}">Completed</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="assignee" class="form-label">Assign To</label>
+          <select class="form-select" id="assignee" name="assignee.id">
+            <th:block th:each="user : ${users}">
+              <option th:value="${user.id}" th:utext="${user.name}"></option>
+            </th:block>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Task</button>
+      </form>
+      <hr/>
+      <a href="/listTasks" class="btn btn-secondary">Back to Tasks</a>
+    </div>
+  </body>
+</html>

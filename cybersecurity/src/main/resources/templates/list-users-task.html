@@ -1,0 +1,84 @@
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>List Users and Tasks</title>
+        <link href="https://cdn.datatables.net/v/bs4/dt-2.2.2/datatables.min.css" rel="stylesheet" integrity="sha384-fTqd416qRc9kwY299KdgUPsjOvS5bwkeE6jlibx2m7eL3xKheqGyU48QCFgZAyN4" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body>
+    <div class="container">
+        <h3>List Users</h3>
+        <hr/>
+        <a th:href="@{/addUserForm}" class="btn btn-primary mb-2">Add User</a>
+        <table class="table table-bordered table-striped" id="user-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user: ${users}">
+                <td th:text="${user.name}"/>
+                <td th:text="${user.email}"/>
+                <td th:text="${user.department}"/>
+                <td>
+                    <a th:href="@{/showUpdateForm(userID=${user.id})}" class="btn btn-info">Update</a>
+                    <a th:href="@{/deleteUser(userID=${user.id})}" class="btn btn-danger ml-2">Delete</a>
+                    <a th:href="@{/assignTaskForm(userID=${user.id})}" class="btn btn-primary ml-2">Assign Task</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+    <div class="container">
+        <h3>Manage Tasks</h3>
+        <hr/>
+        <a th:href="@{/add-task-form}" class="btn btn-success mb-2">Create Task</a>
+        <table class="table table-bordered table-striped" id="task-table">
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task: ${tasks}">
+                <td th:utext="${task.name}"/>
+                <td th:text="${task.description}"/>
+                <td th:text="${task.status}"/>
+                <td th:text="${task.assignee.name}"/>
+                <td>
+                    <a th:href="@{/showUpdateTaskForm(taskID=${task.id})}" class="btn btn-info">Update</a>
+                    <a th:href="@{/deleteTask(taskID=${task.id})}" class="btn btn-danger ml-2">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-2.2.2/datatables.min.js" integrity="sha384-uAn6fsp1rIJ6afAYV0S5it5ao101zH2fViB74y5tPG8LR2FTMg+HXIWRNxvZrniN" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $("#user-table").DataTable({
+                'aoColumnDefs': [{
+                    'bSortable': false,
+                    'aTargets': [-1]
+                }]
+            });
+
+            $("#task-table").DataTable({
+                'aoColumnDefs': [{
+                    'bSortable': false,
+                    'aTargets': [-1]
+                }]
+            });
+        });
+    </script>
+    </body>
+</html>
