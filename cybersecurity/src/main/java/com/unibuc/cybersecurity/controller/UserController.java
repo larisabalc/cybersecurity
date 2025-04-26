@@ -5,6 +5,7 @@ import com.unibuc.cybersecurity.entity.TaskStatus;
 import com.unibuc.cybersecurity.entity.User;
 import com.unibuc.cybersecurity.repository.TaskRepository;
 import com.unibuc.cybersecurity.repository.UserRepository;
+import com.unibuc.cybersecurity.service.TaskService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,12 +28,18 @@ public class UserController {
     @Autowired
     private TaskRepository taskRepository;
 
-    private static final String UPLOAD_DIR = System.getProperty("user.dir") + File.separator + "uploads";
+    private final TaskService taskService;
+
+    private static final String UPLOAD_DIR = System.getProperty("user.dir") + File.separator + "uploads/";
+
+    public UserController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/my-tasks")
     public ModelAndView showUserTasks(HttpSession session) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
-        List<Task> tasks = taskRepository.findByAssignee(loggedInUser);
+        List<Task> tasks = taskService.findTasksByAssignee(loggedInUser.getId());
         ModelAndView mav = new ModelAndView("user-tasks");
         mav.addObject("tasks", tasks);
         return mav;
